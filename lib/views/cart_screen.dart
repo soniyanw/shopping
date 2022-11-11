@@ -19,6 +19,9 @@ class _CartScreenState extends State<CartScreen>
     with AppProviderMixin<CartScreen>, StateMixin {
   Future<void> updatecart() async {
     await context.appViewModel.getproducts();
+    refresh();
+    await context.appViewModel.getproducts();
+    refresh();
   }
 
   @override
@@ -116,6 +119,9 @@ class _CartScreenState extends State<CartScreen>
                                                                           index]
                                                                       .name ??
                                                                   '',
+                                                              price: products[
+                                                                      index]
+                                                                  .price,
                                                             );
                                                           });
                                                         });
@@ -150,7 +156,8 @@ class _CartScreenState extends State<CartScreen>
 
 class Bottom extends StatefulWidget {
   final name;
-  const Bottom({Key? key, this.name}) : super(key: key);
+  final price;
+  const Bottom({Key? key, this.name, this.price}) : super(key: key);
 
   @override
   State<Bottom> createState() => _BottomState();
@@ -172,7 +179,7 @@ class _BottomState extends State<Bottom> {
               children: [
                 MaterialButton(
                   onPressed: () {
-                    count--;
+                    if (count > 1) count--;
                     setState(() {});
                   },
                   color: Colors.blue,
@@ -198,12 +205,13 @@ class _BottomState extends State<Bottom> {
                 ),
               ],
             ),
+            Text("${int.parse(widget.price) * count}"),
             MaterialButton(
               onPressed: () {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   backgroundColor: Colors.green,
-                  content: Text('$count ${widget.name} bought'),
+                  content: Text('Cost : $count ${widget.name} bought'),
                   duration: Duration(seconds: 1),
                 ));
                 count = 1;

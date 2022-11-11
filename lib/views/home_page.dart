@@ -72,6 +72,7 @@ class _HomePageState extends State<HomePage>
   void initState() {
     // TODO: implement initState
     update();
+    refresh();
     super.initState();
   }
 
